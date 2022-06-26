@@ -16,6 +16,8 @@ FROM php:8.1.7-fpm-bullseye
 
 ARG db_host
 ARG db_port
+ARG memcached_host
+ARG memcached_port
 
 RUN \
   apt update \
@@ -44,4 +46,6 @@ COPY --from=builder /tmp/wait-for-it/wait-for-it.sh /var/www/wait-for-it.sh
 RUN chmod +x /var/www/entrypoint.sh
 ENV DB_HOST=${db_host}
 ENV DB_PORT=${db_port}
+ENV MEMCACHED_HOST=${memcached_host}
+ENV MEMCACHED_PORT=${memcached_port}
 ENTRYPOINT ["/var/www/entrypoint.sh"]

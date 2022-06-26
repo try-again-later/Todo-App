@@ -5,13 +5,21 @@ services:
     container_name: todo-app
     environment:
       - APP_ENV=${APP_ENV}
+      - MEMCACHED_USERNAME=${MEMCACHED_USERNAME}
+      - MEMCACHED_PASSWORD=${MEMCACHED_PASSWORD}
+      - MEMCACHED_SERVERS=${MEMCACHED_SERVERS}
     build:
       context: ./
       dockerfile: Dockerfile
       args:
         - db_host=${DB_HOST}
         - db_port=${DB_PORT}
+        - memcached_host=${MEMCACHED_HOST}
+        - memcached_port=${MEMCACHED_PORT}
     working_dir: /var/www/
+    depends_on:
+      - postgres
+      - memcached
 
   nginx:
     container_name: todo-app-nginx
