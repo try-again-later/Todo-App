@@ -1,0 +1,10 @@
+{
+    "name": "try-again-later/todo-app",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "TryAgainLater\\TodoApp\\": "app/"
+        }
+    },
+    "require": {}
+}
