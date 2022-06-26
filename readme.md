@@ -6,7 +6,7 @@
 git clone https://github.com/try-again-later/Todo-App
 
 cd Todo-App
-cp .env.example .env
+cp .env.local .env
 docker-compose up -d
 ```
 
