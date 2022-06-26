@@ -1,9 +1,14 @@
 services:
   app:
     container_name: todo-app
+    environment:
+      - APP_ENV=${APP_ENV}
     build:
       context: ./
       dockerfile: Dockerfile
+      args:
+        - db_host=${DB_HOST}
+        - db_port=${DB_PORT}
     working_dir: /var/www/
 
   nginx:
@@ -16,3 +21,13 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - app
+
+  postgres:
+    container_name: todo-app-postgres
+    image: postgres:14.4
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+    ports:
+      - 5432:5432
