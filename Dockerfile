@@ -1,13 +1,16 @@
+# Build stage
+
 FROM debian:bookworm-slim AS builder
 
 RUN \
   apt update \
   && apt install -y \
-    git
+    git \
+  && git clone https://github.com/vishnubob/wait-for-it /tmp/wait-for-it/ \
+  && chmod +x /tmp/wait-for-it/wait-for-it.sh
 
-RUN git clone https://github.com/vishnubob/wait-for-it /tmp/wait-for-it/
-RUN chmod +x /tmp/wait-for-it/wait-for-it.sh
 
+# Main stage
 
 FROM php:8.1.7-fpm-bullseye
 
@@ -17,12 +20,16 @@ ARG db_port
 RUN \
   apt update \
   && apt install -y \
-    libpq-dev
-
-RUN docker-php-ext-install \
-  pdo \
-  pdo_pgsql \
-  pgsql
+    libpq-dev \
+    libmemcached-dev \
+    zlib1g-dev \
+  && pecl install memcached-3.2.0 \
+  && docker-php-ext-install \
+    pdo \
+    pdo_pgsql \
+    pgsql \
+  && docker-php-ext-enable \
+    memcached
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
