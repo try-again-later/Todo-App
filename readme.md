@@ -22,11 +22,11 @@ composer install
 cp .env.development .env
 docker-compose up -d pgadmin memcached
 
-cd public
 APP_ENV=development \
 MEMCACHED_SERVERS=127.0.0.1:11211 \
   php \
     -S localhost:8080 \
     -d display_errors=on \
     -d variables_order=EGPCS
+    -t ./public/
 ```
