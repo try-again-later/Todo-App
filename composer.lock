@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8b9269555893c01b755a52dcc9060950",
+    "content-hash": "a620c18d07e71751c62c3eeed58a421c",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -386,6 +386,48 @@
                 }
             ],
             "time": "2022-05-10T07:21:04+00:00"
+        },
+        {
+            "name": "try-again-later/multi-backed-enum",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/try-again-later/MultiBackedEnum.git",
+                "reference": "0104280fad1b4e04f03cda713010d2753b2c21a2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/try-again-later/MultiBackedEnum/zipball/0104280fad1b4e04f03cda713010d2753b2c21a2",
+                "reference": "0104280fad1b4e04f03cda713010d2753b2c21a2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TryAgainLater\\MultiBackedEnum\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "try-again-later"
+                }
+            ],
+            "description": "A small PHP library for creating enums with cases backed by multiple values.",
+            "support": {
+                "issues": "https://github.com/try-again-later/MultiBackedEnum/issues",
+                "source": "https://github.com/try-again-later/MultiBackedEnum/tree/v0.1.0"
+            },
+            "time": "2022-06-27T21:46:27+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
