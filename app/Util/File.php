@@ -31,6 +31,21 @@ enum FileCreationResult
         $inAnyCase($this);
         return $this;
     }
+
+    public function failed()
+    {
+        return $this === self::Failure;
+    }
+
+    public function succeeded()
+    {
+        return $this === self::Failure;
+    }
+
+    public function didNothing()
+    {
+        return $this === self::AlreadyExists;
+    }
 }
 
 class File

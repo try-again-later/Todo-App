@@ -27,6 +27,6 @@ MEMCACHED_SERVERS=127.0.0.1:11211 \
   php \
     -S localhost:8080 \
     -d display_errors=on \
-    -d variables_order=EGPCS
+    -d variables_order=EGPCS \
     -t ./public/
 ```
