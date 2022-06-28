@@ -6,19 +6,19 @@ namespace TryAgainLater\TodoApp\Util;
 
 class Path
 {
-    static function joinSegments(string ...$segments)
+    static function joinSegments(string ...$segments): string
     {
         return implode(DIRECTORY_SEPARATOR, $segments);
     }
 
-    static function appendFile(string $folderPath, string ...$segments)
+    static function appendFile(string $folderPath, string ...$segments): string
     {
         assert(str_ends_with($folderPath, DIRECTORY_SEPARATOR));
 
         return $folderPath . self::joinSegments(...$segments);
     }
 
-    static function appendFolder(string $folderPath, string ...$segments)
+    static function appendFolder(string $folderPath, string ...$segments): string
     {
         assert(str_ends_with($folderPath, DIRECTORY_SEPARATOR));
 

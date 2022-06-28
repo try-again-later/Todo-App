@@ -10,7 +10,7 @@ enum FileCreationResult
     case AlreadyExists;
     case Failure;
 
-    public function then(callable $onSuccess)
+    public function then(callable $onSuccess): self
     {
         if ($this === self::Success) {
             $onSuccess($this);
@@ -18,7 +18,7 @@ enum FileCreationResult
         return $this;
     }
 
-    public function catch(callable $onFailure)
+    public function catch(callable $onFailure): self
     {
         if ($this === self::Failure) {
             $onFailure($this);
@@ -26,7 +26,7 @@ enum FileCreationResult
         return $this;
     }
 
-    public function finally(callable $inAnyCase)
+    public function finally(callable $inAnyCase): self
     {
         $inAnyCase($this);
         return $this;

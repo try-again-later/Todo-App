@@ -28,8 +28,16 @@ class AppPaths
         return $this->root('public', ...$segments);
     }
 
+    public function logs(string ...$segments): string
+    {
+        return Path::appendFile(
+            Path::appendFolder($this->rootPath, 'storage', 'logs'),
+            ...$segments,
+        );
+    }
+
     public function errorLog(): string
     {
-        return self::storage('logs', 'error.log');
+        return $this->logs('error.log');
     }
 }
