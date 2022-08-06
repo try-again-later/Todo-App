@@ -8,7 +8,9 @@
     },
     "require": {
         "vlucas/phpdotenv": "^5.4",
-        "try-again-later/multi-backed-enum": "^0.1.0"
+        "try-again-later/multi-backed-enum": "^0.1.0",
+        "try-again-later/pup": "^0.1.0",
+        "twig/twig": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9"

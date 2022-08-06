@@ -6,6 +6,19 @@ namespace TryAgainLater\TodoApp\Database;
 
 use InvalidArgumentException;
 
+use TryAgainLater\Pup\Attributes\{FromAssociativeArray, MakeParsed};
+use TryAgainLater\Pup\Attributes\Generic\{ParsedProperty, Required};
+
+#[FromAssociativeArray]
+class DatabaseRawConfig
+{
+    #[ParsedProperty('DATABASE_URL')]
+    #[Required]
+    public string $databaseUrl;
+
+    use MakeParsed;
+}
+
 class DatabaseConfig
 {
     const DATABASE_URL_REGEXP = '/^(?<driver>.+?):\/\/(?<user>.+?):(?<password>.+)@(?<host>.+?):(?<port>\d+)\/(?<databaseName>.+)$/';
@@ -32,6 +45,11 @@ class DatabaseConfig
             port: intval($matches['port']),
             databaseName: ltrim($matches['databaseName'], '/'),
         );
+    }
+
+    public static function parseFromArray(array $array): static {
+        $rawConfig = DatabaseRawConfig::from($array);
+        return static::parseFromUrl($rawConfig->databaseUrl);
     }
 
     public function __construct(

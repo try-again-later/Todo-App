@@ -27,7 +27,8 @@ RUN \
     zlib1g-dev \
     libxml2-dev \
     libzip-dev \
-  && pecl install memcached-3.2.0 \
+  && pecl install \
+    memcached-3.2.0 \
   && docker-php-ext-install \
     pdo \
     pdo_pgsql \

@@ -40,4 +40,14 @@ class AppPaths
     {
         return $this->logs('error.log');
     }
+
+    public function env(): string
+    {
+        return $this->root('.env');
+    }
+
+    public function templates(string ...$segments): string
+    {
+        return $this->root('templates', ...$segments);
+    }
 }
