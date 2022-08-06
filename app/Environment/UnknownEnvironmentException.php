@@ -6,7 +6,7 @@ namespace TryAgainLater\TodoApp\Environment;
 
 use UnexpectedValueException;
 
-class UnknownEnvironmentException extends UnexpectedValueException
+class EnvironmentException extends UnexpectedValueException
 {
     public static function becauseFailedToParse(string $variableName, string $value): self
     {
