@@ -74,6 +74,7 @@ $rawConfigs = Dotenv::createArrayBacked(
     $appPaths->root(),
     basename($appPaths->env()),
 )->load();
+$rawConfigs = array_merge($rawConfigs, $_ENV);
 
 $databaseConfig = DatabaseConfig::parseFromArray($rawConfigs);
 $database = new Database($databaseConfig);
