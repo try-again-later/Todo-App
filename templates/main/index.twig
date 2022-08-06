@@ -3,7 +3,20 @@
 {% block title %}ToDo App{% endblock %}
 
 {% block content %}
-  <h1>Main</h1>
-  <p><a href="/login">Sign in</a></p>
-  <p><a href="/signup">Sign up</a></p>
+  <header>
+    <div>
+      <a href="/" aria-label="Go to home page">ToDo App</a>
+    </div>
+
+    <nav>
+      <ul>
+        <li><a href="/login">Sign In</a></li>
+        <li><a href="/signup">Sign Up</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>ToDo App</h1>
+  </main>
 {% endblock %}

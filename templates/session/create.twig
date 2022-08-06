@@ -3,5 +3,26 @@
 {% block title %}ToDo App — Sign In{% endblock %}
 
 {% block content %}
-  <h1>Sign In</h1>
+  <header>
+    <div>
+      <a href="/" aria-label="Go to home page">ToDo App</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Sign In</h1>
+    <form action="/login" method="post">
+      <input type="hidden" name="csrf-token" required />
+
+      <div>
+        <label>Email: <input type="email" name="email" required /></label>
+      </div>
+
+      <div>
+        <label>Password: <input type="password" name="password" required /></label>
+      </div>
+
+      <button type="submit">Sign In</button>
+    </form>
+  </main>
 {% endblock %}

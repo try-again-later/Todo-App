@@ -435,16 +435,16 @@
         },
         {
             "name": "try-again-later/pup",
-            "version": "v0.1.0",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/try-again-later/pup.git",
-                "reference": "1319ca0af0e58710addb9b7954f6a482f9691b27"
+                "reference": "035e9f11dd67fb216b5b4519cf75000adb722dde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/try-again-later/pup/zipball/1319ca0af0e58710addb9b7954f6a482f9691b27",
-                "reference": "1319ca0af0e58710addb9b7954f6a482f9691b27",
+                "url": "https://api.github.com/repos/try-again-later/pup/zipball/035e9f11dd67fb216b5b4519cf75000adb722dde",
+                "reference": "035e9f11dd67fb216b5b4519cf75000adb722dde",
                 "shasum": ""
             },
             "require": {
@@ -466,9 +466,9 @@
             "description": "A small PHP library for value parsing and validation inspired by yup.",
             "support": {
                 "issues": "https://github.com/try-again-later/pup/issues",
-                "source": "https://github.com/try-again-later/pup/tree/v0.1.0"
+                "source": "https://github.com/try-again-later/pup/tree/v0.1.1"
             },
-            "time": "2022-07-03T17:13:42+00:00"
+            "time": "2022-08-06T22:38:01+00:00"
         },
         {
             "name": "twig/twig",

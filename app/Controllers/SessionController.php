@@ -8,7 +8,7 @@ use TryAgainLater\TodoApp\App;
 
 class SessionController
 {
-    public static function create(App $app)
+    public static function create(App $app): string
     {
         return $app->view->render('session/create.twig');
     }
