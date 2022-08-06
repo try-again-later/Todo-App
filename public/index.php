@@ -70,10 +70,13 @@ set_exception_handler(function (Throwable $error) use ($appPaths) {
 
 // Load configs from .env file
 
-$rawConfigs = Dotenv::createArrayBacked(
-    $appPaths->root(),
-    basename($appPaths->env()),
-)->load();
+$rawConfigs = [];
+if (file_exists($appPaths->env())) {
+    $rawConfigs = Dotenv::createArrayBacked(
+        $appPaths->root(),
+        basename($appPaths->env()),
+    )->load();
+}
 $rawConfigs = array_merge($rawConfigs, $_ENV);
 
 $databaseConfig = DatabaseConfig::parseFromArray($rawConfigs);
