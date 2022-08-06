@@ -83,11 +83,7 @@ $databaseConfig = DatabaseConfig::parseFromArray($rawConfigs);
 $database = new Database($databaseConfig);
 
 $twigLoader = new TwigLoader($appPaths->templates());
-$twigOptions = [];
-if (Environment::is(Environment::Staging, Environment::Production)) {
-    $twigOptions['cache'] = $appPaths->storage('twig-cache');
-}
-$twig = new TwigEnvironment($twigLoader, $twigOptions);
+$twig = new TwigEnvironment($twigLoader, []);
 $template = $twig->load('index.twig');
 
 
