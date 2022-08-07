@@ -8,6 +8,7 @@ use TryAgainLater\Pup\Attributes\{FromAssociativeArray, MakeParsed};
 use TryAgainLater\Pup\Attributes\Generic\{ParsedProperty, Required, Test};
 use TryAgainLater\Pup\Attributes\String\MinLength;
 use TryAgainLater\TodoApp\App;
+use TryAgainLater\TodoApp\Models\User;
 
 #[FromAssociativeArray]
 class SignUpData
@@ -55,9 +56,20 @@ class UserController
             $keysToErrors['repeated-password'][] = 'Passwords do not match.';
         }
 
-        if (!empty($errors)) {
+        if (!is_null(User::getByEmail($app->database->pdo(), $signUpData->email))) {
+            $keysToErrors['email'][] = 'This email is already registered.';
+        }
+
+        if (!empty($keysToErrors)) {
             return $app->view->render('user/create.twig', ['errors' => $keysToErrors]);
         }
+
+        $hashedPassword = password_hash($signUpData->password, PASSWORD_BCRYPT);
+        $user = new User(
+            email: $signUpData->email,
+            password: $hashedPassword,
+        );
+        $user->save($app->database->pdo());
 
         header('Location: ' . '/');
     }

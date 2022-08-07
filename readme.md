@@ -30,3 +30,20 @@ MEMCACHED_SERVERS=127.0.0.1:11211 \
     -d variables_order=EGPCS \
     -t ./public/
 ```
+
+## Creating tables when running first time
+
+```sh
+APP_ENV=development \
+MEMCACHED_SERVERS=127.0.0.1:11211 \
+  php \
+    -d variables_order=EGPCS \
+    ./migrations.php
+
+# drop all of the tables and create fresh ones
+APP_ENV=development \
+MEMCACHED_SERVERS=127.0.0.1:11211 \
+  php \
+    -d variables_order=EGPCS \
+    ./migrations.php reset
+```

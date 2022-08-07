@@ -1,9 +1,20 @@
 <?php
 
-use TryAgainLater\TodoApp\App;
+use TryAgainLater\TodoApp\{App, Request, Router};
 use TryAgainLater\TodoApp\Controllers\{UserController, SessionController};
+use TryAgainLater\TodoApp\Models\User;
 
 require_once '../app/bootstrap.php';
+
+$request = new Request(serverArray: $_SERVER, getArray: $_GET, postArray: $_POST);
+
+$router = new Router($request);
+
+$app = new App(
+    database: $database,
+    view: $twig,
+    request: $request,
+);
 
 $router
     ->onNotFound(static function (App $app) {

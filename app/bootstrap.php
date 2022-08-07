@@ -91,21 +91,8 @@ if (file_exists($appPaths->env())) {
 }
 $rawConfigs = array_merge($rawConfigs, $_ENV);
 
-
-// bootstrap the app
-
 $databaseConfig = DatabaseConfig::parseFromArray($rawConfigs);
 $database = new Database($databaseConfig);
 
 $twigLoader = new TwigLoader($appPaths->templates());
 $twig = new TwigEnvironment($twigLoader);
-
-$request = new Request(serverArray: $_SERVER, getArray: $_GET, postArray: $_POST);
-
-$router = new Router($request);
-
-$app = new App(
-    database: $database,
-    view: $twig,
-    request: $request,
-);
