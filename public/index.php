@@ -23,7 +23,13 @@ try {
         })
 
         ->get('/', static function (App $app) {
-            return $app->view->render('main/index.twig');
+            return $app->view->render(
+                'main/index.twig',
+                [
+                    'userEmail' => $_SESSION['user-email'] ?? null,
+                    'csrfToken' => $_SESSION['csrf-token'] ?? '',
+                ],
+            );
         })
 
         ->get('signup', UserController::create(...))

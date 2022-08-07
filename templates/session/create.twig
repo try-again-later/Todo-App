@@ -12,14 +12,16 @@
   <main>
     <h1>Sign In</h1>
     <form action="/login" method="post">
-      <input type="hidden" name="csrf-token" required />
+      <input type="hidden" name="csrf-token" value="{{ csrfToken }}" required />
 
       <div>
         <label>Email: <input type="email" name="email" required /></label>
+        {% include 'components/forms/errors.twig' with {'errors': errors['email']} %}
       </div>
 
       <div>
         <label>Password: <input type="password" name="password" required /></label>
+        {% include 'components/forms/errors.twig' with {'errors': errors['password']} %}
       </div>
 
       <button type="submit">Sign In</button>

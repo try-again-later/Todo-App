@@ -6,7 +6,7 @@ namespace TryAgainLater\TodoApp\Controllers;
 
 use TryAgainLater\Pup\Attributes\{FromAssociativeArray, MakeParsed};
 use TryAgainLater\Pup\Attributes\Generic\{ParsedProperty, Required, Test};
-use TryAgainLater\Pup\Attributes\String\MinLength;
+use TryAgainLater\Pup\Attributes\String\{MinLength, MaxLength};
 use TryAgainLater\TodoApp\App;
 use TryAgainLater\TodoApp\Models\User;
 
@@ -19,6 +19,7 @@ class SignUpData
     }
 
     #[ParsedProperty, Required]
+    #[MinLength(1), MaxLength(255)]
     #[Test(
         name: 'Is email',
         check: [self::class, 'checkEmail'],
@@ -83,6 +84,7 @@ class UserController
         );
         $user->save($app->database->pdo());
 
+        $_SESSION['user-email'] = $user->email;
         header('Location: ' . '/');
     }
 }

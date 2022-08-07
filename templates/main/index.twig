@@ -9,14 +9,26 @@
     </div>
 
     <nav>
-      <ul>
-        <li><a href="/login">Sign In</a></li>
-        <li><a href="/signup">Sign Up</a></li>
-      </ul>
+      {% if userEmail is null %}
+        <ul>
+          <li><a href="/login">Sign In</a></li>
+          <li><a href="/signup">Sign Up</a></li>
+        </ul>
+      {% else %}
+        <form action="/logout" method="post">
+          <input type="hidden" name="csrf-token" value="{{ csrfToken }}">
+          <button type="submit">Log Out</button>
+        </form>
+      {% endif %}
     </nav>
   </header>
 
   <main>
     <h1>ToDo App</h1>
+    {% if userEmail is null %}
+      <p>You are not logged in...</p>
+    {% else %}
+      <p>You are logged in!</p>
+    {% endif %}
   </main>
 {% endblock %}
