@@ -41,7 +41,10 @@ class UserController
 {
     public static function create(App $app): string
     {
-        return $app->view->render('user/create.twig');
+        return $app->view->render(
+            'user/create.twig',
+            ['csrfToken' => $_SESSION['csrf-token'] ?? ''],
+        );
     }
 
     public static function store(App $app)
@@ -56,12 +59,21 @@ class UserController
             $keysToErrors['repeated-password'][] = 'Passwords do not match.';
         }
 
-        if (!is_null(User::getByEmail($app->database->pdo(), $signUpData->email))) {
+        if (
+            isset($signUpData) &&
+            !is_null(User::getByEmail($app->database->pdo(), $signUpData->email))
+        ) {
             $keysToErrors['email'][] = 'This email is already registered.';
         }
 
         if (!empty($keysToErrors)) {
-            return $app->view->render('user/create.twig', ['errors' => $keysToErrors]);
+            return $app->view->render(
+                'user/create.twig',
+                [
+                    'errors' => $keysToErrors,
+                    'csrfToken' => $_SESSION['csrf-token'] ?? '',
+                ]
+            );
         }
 
         $hashedPassword = password_hash($signUpData->password, PASSWORD_BCRYPT);

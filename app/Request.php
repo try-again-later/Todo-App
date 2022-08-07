@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace TryAgainLater\TodoApp;
 
 use InvalidArgumentException;
-
+use RuntimeException;
 use TryAgainLater\Pup\Schema;
 
 
@@ -36,8 +36,17 @@ class Request
         $this->method = RequestMethod::fromString($serverArray['REQUEST_METHOD']);
 
         if ($this->method === RequestMethod::GET) {
+            $_SESSION['csrf-token'] = bin2hex(random_bytes(35));
             $this->body = $getArray;
         } else if ($this->method === RequestMethod::POST) {
+            if (
+                !isset($postArray['csrf-token']) ||
+                $postArray['csrf-token'] !== $_SESSION['csrf-token']
+            )
+            {
+                http_response_code(403);
+                throw new RuntimeException('CSRF token mismatch.');
+            }
             $this->body = $postArray;
         }
     }
