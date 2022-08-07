@@ -22,6 +22,13 @@ composer install
 cp .env.development .env
 docker-compose up -d pgadmin memcached
 
+# create tables (optionally add CLI parameter "reset" to drop any existing tables)
+APP_ENV=development \
+MEMCACHED_SERVERS=127.0.0.1:11211 \
+  php \
+    -d variables_order=EGPCS \
+    ./migrations.php
+
 APP_ENV=development \
 MEMCACHED_SERVERS=127.0.0.1:11211 \
   php \
@@ -29,21 +36,4 @@ MEMCACHED_SERVERS=127.0.0.1:11211 \
     -d display_errors=on \
     -d variables_order=EGPCS \
     -t ./public/
-```
-
-## Creating tables when running first time
-
-```sh
-APP_ENV=development \
-MEMCACHED_SERVERS=127.0.0.1:11211 \
-  php \
-    -d variables_order=EGPCS \
-    ./migrations.php
-
-# drop all of the tables and create fresh ones
-APP_ENV=development \
-MEMCACHED_SERVERS=127.0.0.1:11211 \
-  php \
-    -d variables_order=EGPCS \
-    ./migrations.php reset
 ```
