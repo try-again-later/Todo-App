@@ -29,6 +29,11 @@ MEMCACHED_SERVERS=127.0.0.1:11211 \
     -d variables_order=EGPCS \
     ./migrations.php
 
+# compile CSS styles
+npm i
+npm run build
+
+# run a server with the app
 APP_ENV=development \
 MEMCACHED_SERVERS=127.0.0.1:11211 \
   php \

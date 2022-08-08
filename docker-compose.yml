@@ -23,12 +23,15 @@ services:
 
   nginx:
     container_name: todo-app-nginx
-    image: nginx:1.23.0-alpine
+    build:
+      context: ./
+      dockerfile: nginx.dockerfile
+    # image: nginx:1.23.0-alpine
     ports:
       - 8080:80
-    volumes:
-      - ./:/var/www/
-      - ./nginx.conf:/etc/nginx/nginx.conf
+    # volumes:
+    #   - ./:/var/www/
+    #   - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - app
 

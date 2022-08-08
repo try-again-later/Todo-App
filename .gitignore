@@ -1,5 +1,8 @@
 .vscode/
 vendor/
+node_modules/
+
+public/styles.css
 
 .env
 

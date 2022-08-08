@@ -46,6 +46,7 @@ COPY ./composer.* .
 RUN composer install
 
 COPY . .
+
 COPY --from=builder /tmp/wait-for-it/wait-for-it.sh /var/www/wait-for-it.sh
 RUN chmod +x /var/www/entrypoint.sh
 
