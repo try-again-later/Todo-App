@@ -39,6 +39,10 @@ if (!empty($_ENV['MEMCACHED_USERNAME']) && !empty($_ENV['MEMCACHED_PASSWORD'])) 
     ini_set('memcached.sess_sasl_password', $_ENV['MEMCACHED_PASSWORD']);
 }
 
+session_set_cookie_params(["SameSite" => "Strict"]);
+session_set_cookie_params(["Secure" => "true"]);
+session_set_cookie_params(["HttpOnly" => "true"]);
+
 session_start();
 
 
