@@ -14,24 +14,18 @@ try {
 
     $app = new App(
         database: $database,
-        view: $twig,
+        twig: $twig,
         request: $request,
     );
 
     $router
         ->onNotFound(static function (App $app) {
             http_response_code(404);
-            return $app->view->render('errors/404.twig');
+            return $app->view->render('errors/404');
         })
 
         ->get('/', static function (App $app) {
-            return $app->view->render(
-                'main/index.twig',
-                [
-                    'userEmail' => $_SESSION['user-email'] ?? null,
-                    'csrfToken' => $_SESSION['csrf-token'] ?? '',
-                ],
-            );
+            return $app->view->render('main/index');
         })
 
         ->get('signup', UserController::create(...))
@@ -41,12 +35,12 @@ try {
         ->post('login', SessionController::store(...))
         ->post('logout', SessionController::destroy(...))
 
-        ->get('todos', TodoController::index(...))
-        ->get('todos/create', TodoController::create(...))
-        ->post('todos', TodoController::store(...))
-        ->get('todos/(?<id>\\d+)/edit', TodoController::edit(...))
-        ->post('todos/(?<id>\\d+)', TodoController::update(...))
-        ->post('todos/(?<id>\\d+)/destroy', TodoController::destroy(...));
+        ->get('todos', TodoController::index(...), auth: true)
+        ->get('todos/create', TodoController::create(...), auth: true)
+        ->post('todos', TodoController::store(...), auth: true)
+        ->get('todos/(?<id>\\d+)/edit', TodoController::edit(...), auth: true)
+        ->post('todos/(?<id>\\d+)', TodoController::update(...), auth: true)
+        ->post('todos/(?<id>\\d+)/destroy', TodoController::destroy(...), auth: true);
 
     $response = $router->resolve($app);
     if (!empty($response)) {

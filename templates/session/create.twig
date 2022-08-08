@@ -8,7 +8,7 @@
   <main>
     <h1>Sign In</h1>
     <form action="/login" method="post">
-      <input type="hidden" name="csrf-token" value="{{ csrfToken }}" required />
+      {% include 'components/forms/csrf.twig' %}
 
       <div>
         <label>Email: <input type="email" name="email" required /></label>

@@ -12,6 +12,7 @@ class Todo
     public function __construct(
         public int $userId,
         public string $title,
+        public bool $completed,
         public ?string $body = null,
         public ?int $id = null,
     )
@@ -21,7 +22,7 @@ class Todo
     public static function getByUserId(PDO $pdo, int $userId): array
     {
         $statement = $pdo->prepare(<<<SQL
-            SELECT todo_id, title, body
+            SELECT todo_id, title, body, completed
             FROM todo
             WHERE user_id = :user_id
             SQL
@@ -39,6 +40,7 @@ class Todo
                 title: $todoData['title'],
                 body: $todoData['body'] ?? null,
                 userId: $userId,
+                completed: $todoData['completed'],
             );
         }
 
@@ -48,7 +50,7 @@ class Todo
     public static function getByTodoId(PDO $pdo, int $todoId): ?self
     {
         $statement = $pdo->prepare(<<<SQL
-            SELECT title, body, user_id
+            SELECT title, body, user_id, completed
             FROM todo
             WHERE todo_id = :todo_id
             SQL
@@ -69,6 +71,7 @@ class Todo
             body: $todoData['body'],
             userId: $todoData['user_id'],
             id: $todoId,
+            completed: $todoData['completed'],
         );
     }
 
@@ -80,7 +83,8 @@ class Todo
                 SET
                     title = :title,
                     body = :body,
-                    user_id = :user_id
+                    user_id = :user_id,
+                    completed = :completed
                 WHERE
                     todo_id = :todo_id
                 SQL
@@ -89,14 +93,16 @@ class Todo
         } else {
             $statement = $pdo->prepare(<<<SQL
                 INSERT INTO todo
-                    (title, body, user_id)
+                    (title, body, user_id, completed)
                 VALUES
-                    (:title, :body, :user_id)
+                    (:title, :body, :user_id, :completed)
                 SQL
             );
         }
         $statement->bindValue(':title', $this->title, PDO::PARAM_STR);
         $statement->bindValue(':user_id', $this->userId, PDO::PARAM_INT);
+        $statement->bindValue(':completed', $this->completed, PDO::PARAM_BOOL);
+
         if (isset($this->body)) {
             $statement->bindValue(':body', $this->body, PDO::PARAM_STR);
         } else {

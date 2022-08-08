@@ -9,7 +9,7 @@
     <h1>Edit Task</h1>
 
     <form action="/todos/{{ todo.id }}" method="post">
-      <input type="hidden" name="csrf-token" value="{{ csrfToken }}" />
+      {% include 'components/forms/csrf.twig' %}
 
       <div>
         <label>

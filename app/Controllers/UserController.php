@@ -42,22 +42,17 @@ class UserController
 {
     public static function create(App $app): ?string
     {
-        if (isset($_SESSION['user-email'])) {
-            header('Location: ' . '/');
-            return null;
+        if ($app->auth()) {
+            return $app->redirect('/');
         }
 
-        return $app->view->render(
-            'user/create.twig',
-            ['csrfToken' => $_SESSION['csrf-token'] ?? ''],
-        );
+        return $app->view->render('user/create');
     }
 
     public static function store(App $app)
     {
-        if (isset($_SESSION['user-email'])) {
-            header('Location: ' . '/');
-            return null;
+        if ($app->auth()) {
+            return $app->redirect('/');
         }
 
         [$signUpData, $errors] = SignUpData::tryFrom($app->request->body);
@@ -79,11 +74,8 @@ class UserController
 
         if (!empty($keysToErrors)) {
             return $app->view->render(
-                'user/create.twig',
-                [
-                    'errors' => $keysToErrors,
-                    'csrfToken' => $_SESSION['csrf-token'] ?? '',
-                ]
+                'user/create',
+                ['errors' => $keysToErrors],
             );
         }
 
@@ -95,6 +87,7 @@ class UserController
         $user->save($app->database->pdo());
 
         $_SESSION['user-email'] = $user->email;
-        header('Location: ' . '/');
+
+        return $app->redirect('/');
     }
 }

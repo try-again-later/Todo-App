@@ -28,22 +28,17 @@ class SessionController
 {
     public static function create(App $app): ?string
     {
-        if (isset($_SESSION['user-email'])) {
-            header('Location: ' . '/');
-            return null;
+        if ($app->auth()) {
+            return $app->redirect('/');
         }
 
-        return $app->view->render(
-            'session/create.twig',
-            ['csrfToken' => $_SESSION['csrf-token'] ?? ''],
-        );
+        return $app->view->render('session/create');
     }
 
     public static function store(App $app)
     {
-        if (isset($_SESSION['user-email'])) {
-            header('Location: ' . '/');
-            return;
+        if ($app->auth()) {
+            return $app->redirect('/');
         }
 
         [$loginData, $errors] = LoginData::tryFrom($app->request->body);
@@ -64,27 +59,24 @@ class SessionController
         if (isset($userModel)) {
             if (password_verify($loginData->password, $userModel->password)) {
                 $_SESSION['user-email'] = $loginData->email;
-                return header('Location: ' . '/');
+                return $app->redirect('/');
             } else {
                 $keysToErrors['email'][] = 'Invalid email or password.';
             }
         }
 
         return $app->view->render(
-            'session/create.twig',
-            [
-                'csrfToken' => $_SESSION['csrf-token'] ?? '',
-                'errors' => $keysToErrors,
-            ],
+            'session/create',
+            ['errors' => $keysToErrors],
         );
     }
 
-    public static function destroy()
+    public static function destroy(App $app)
     {
-        if (isset($_SESSION['user-email'])) {
+        if ($app->auth()) {
             session_unset();
             session_destroy();
         }
-        header('Location: ' . '/');
+        return $app->redirect('/');
     }
 }

@@ -4,6 +4,16 @@ declare(strict_types = 1);
 
 namespace TryAgainLater\TodoApp;
 
+class Route
+{
+    public function __construct(
+        public $callback,
+        public bool $auth = false,
+    )
+    {
+    }
+}
+
 class Router
 {
     private array $routes = [];
@@ -17,6 +27,7 @@ class Router
         RequestMethod $requestMethod,
         string $route,
         callable $controller,
+        bool $auth = false,
     ): self
     {
         if (!str_starts_with($route, '/')) {
@@ -26,23 +37,23 @@ class Router
             $route = $route . '/?';
         }
 
-        $this->routes[$requestMethod->value()]["<^$route\$>"] = $controller;
+        $this->routes[$requestMethod->value()]["<^$route\$>"] = new Route($controller, $auth);
         return $this;
     }
 
-    public function get(string $route, callable $controller): self
+    public function get(string $route, callable $controller, bool $auth = false): self
     {
-        return $this->register(RequestMethod::GET, $route, $controller);
+        return $this->register(RequestMethod::GET, $route, $controller, $auth);
     }
 
-    public function post(string $route, callable $controller): self
+    public function post(string $route, callable $controller, bool $auth = false): self
     {
-        return $this->register(RequestMethod::POST, $route, $controller);
+        return $this->register(RequestMethod::POST, $route, $controller, $auth);
     }
 
     public function onNotFound(callable $controller): self
     {
-        $this->onRouteNotFound = $controller;
+        $this->onRouteNotFound = new Route($controller);
         return $this;
     }
 
@@ -52,9 +63,13 @@ class Router
         $requestPath = $this->request->path;
 
         if (isset($this->routes[$methodAsString])) {
-            foreach ($this->routes[$methodAsString] as $routePath => $callback) {
+            foreach ($this->routes[$methodAsString] as $routePath => $route) {
                 if (preg_match($routePath, $requestPath, $matches) === 1) {
-                    return ($callback)($app, $matches);
+                    if ($route->auth && !$app->auth()) {
+                        return $app->redirect('/login');
+                    }
+
+                    return ($route->callback)($app, $matches);
                 }
             }
         }
@@ -62,6 +77,6 @@ class Router
         if (!isset($this->onRouteNotFound)) {
             return null;
         }
-        return ($this->onRouteNotFound)($app);
+        return ($this->onRouteNotFound->callback)($app);
     }
 }

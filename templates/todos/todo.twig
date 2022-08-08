@@ -8,6 +8,15 @@
     <button type="submit">Delete</button>
   </form>
 
+  <form action="/todos/{{ todo.id }}" method="post">
+    {% include 'components/forms/csrf.twig' %}
+    <input type="hidden" name="completed" value="{{ todo.completed ? 'false' : 'true' }}" />
+
+    <button type="submit">
+      {{ todo.completed ? 'Mark as undone' : 'Mark as done' }}
+    </button>
+  </form>
+
   {% if todo.body is not null %}
     <p>{{ todo.body|e }}</p>
   {% endif %}
