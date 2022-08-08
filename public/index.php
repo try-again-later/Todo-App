@@ -46,6 +46,8 @@ try {
     if (!empty($response)) {
         echo $response;
     }
+
+    unset($_SESSION['last-user-input']);
 } catch (Exception $e) {
     echo $twig->render('errors/500.twig');
     throw $e;

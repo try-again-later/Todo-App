@@ -57,6 +57,8 @@ class UserController
 
         [$signUpData, $errors] = SignUpData::tryFrom($app->request->body);
 
+        $_SESSION['last-user-input'] = $app->request->body;
+
         $keysToErrors = [];
         foreach ($errors as [$key, $error]) {
             $keysToErrors[$key][] = $error;
@@ -75,7 +77,10 @@ class UserController
         if (!empty($keysToErrors)) {
             return $app->view->render(
                 'user/create',
-                ['errors' => $keysToErrors],
+                [
+                    'errors' => $keysToErrors,
+                    'values' => $_SESSION['last-user-input'] ?? [],
+                ],
             );
         }
 
@@ -87,6 +92,7 @@ class UserController
         $user->save($app->database->pdo());
 
         $_SESSION['user-email'] = $user->email;
+        unset($_SESSION['last-user-input']);
 
         return $app->redirect('/');
     }

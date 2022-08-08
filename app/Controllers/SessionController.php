@@ -43,6 +43,8 @@ class SessionController
 
         [$loginData, $errors] = LoginData::tryFrom($app->request->body);
 
+        $_SESSION['last-user-input'] = $app->request->body;
+
         $keysToErrors = [];
         foreach ($errors as [$key, $error]) {
             $keysToErrors[$key][] = $error;
@@ -59,6 +61,7 @@ class SessionController
         if (isset($userModel)) {
             if (password_verify($loginData->password, $userModel->password)) {
                 $_SESSION['user-email'] = $loginData->email;
+                unset($_SESSION['last-user-input']);
                 return $app->redirect('/');
             } else {
                 $keysToErrors['email'][] = 'Invalid email or password.';
@@ -67,7 +70,10 @@ class SessionController
 
         return $app->view->render(
             'session/create',
-            ['errors' => $keysToErrors],
+            [
+                'errors' => $keysToErrors,
+                'values' => $_SESSION['last-user-input'],
+            ],
         );
     }
 

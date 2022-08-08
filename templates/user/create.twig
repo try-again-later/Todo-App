@@ -9,7 +9,7 @@
     {% block content %}
       {%
         include 'components/forms/input.twig'
-        with {type: 'email', name: 'email', required: true, errors: errors['email']}
+        with {type: 'email', name: 'email', required: true, errors: errors['email'], value: values['email']}
       %}
 
       {%

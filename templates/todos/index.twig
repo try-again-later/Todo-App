@@ -14,6 +14,7 @@
     }
   %}
 
+  {% if todos|length > 0 %}
   <ul class="flex flex-col gap-4">
     {% for todo in todos %}
       <li>
@@ -21,4 +22,7 @@
       </li>
     {% endfor %}
   </ul>
+  {% else %}
+    <p class="text-center text-zinc-400 text-lg italic">No tasks here yet...</p>
+  {% endif %}
 {% endblock %}
