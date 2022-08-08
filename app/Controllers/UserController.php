@@ -40,8 +40,13 @@ class SignUpData
 
 class UserController
 {
-    public static function create(App $app): string
+    public static function create(App $app): ?string
     {
+        if (isset($_SESSION['user-email'])) {
+            header('Location: ' . '/');
+            return null;
+        }
+
         return $app->view->render(
             'user/create.twig',
             ['csrfToken' => $_SESSION['csrf-token'] ?? ''],
@@ -50,6 +55,11 @@ class UserController
 
     public static function store(App $app)
     {
+        if (isset($_SESSION['user-email'])) {
+            header('Location: ' . '/');
+            return null;
+        }
+
         [$signUpData, $errors] = SignUpData::tryFrom($app->request->body);
 
         $keysToErrors = [];

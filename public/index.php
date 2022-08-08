@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types = 1);
+
 use TryAgainLater\TodoApp\{App, Request, Router};
-use TryAgainLater\TodoApp\Controllers\{UserController, SessionController};
+use TryAgainLater\TodoApp\Controllers\{UserController, SessionController, TodoController};
 
 require_once '../app/bootstrap.php';
 
@@ -37,7 +39,14 @@ try {
 
         ->get('login', SessionController::create(...))
         ->post('login', SessionController::store(...))
-        ->post('logout', SessionController::destroy(...));
+        ->post('logout', SessionController::destroy(...))
+
+        ->get('todos', TodoController::index(...))
+        ->get('todos/create', TodoController::create(...))
+        ->post('todos', TodoController::store(...))
+        ->get('todos/(?<id>\\d+)/edit', TodoController::edit(...))
+        ->post('todos/(?<id>\\d+)', TodoController::update(...))
+        ->post('todos/(?<id>\\d+)/destroy', TodoController::destroy(...));
 
     $response = $router->resolve($app);
     if (!empty($response)) {

@@ -22,7 +22,11 @@ class Router
         if (!str_starts_with($route, '/')) {
             $route = '/' . $route;
         }
-        $this->routes[$requestMethod->value()][$route] = $controller;
+        if (!str_ends_with($route, '/')) {
+            $route = $route . '/?';
+        }
+
+        $this->routes[$requestMethod->value()]["<^$route\$>"] = $controller;
         return $this;
     }
 
@@ -47,11 +51,12 @@ class Router
         $methodAsString = $this->request->method->value();
         $requestPath = $this->request->path;
 
-        if (
-            isset($this->routes[$methodAsString]) &&
-            isset($this->routes[$methodAsString][$requestPath])
-        ) {
-            return ($this->routes[$methodAsString][$requestPath])($app);
+        if (isset($this->routes[$methodAsString])) {
+            foreach ($this->routes[$methodAsString] as $routePath => $callback) {
+                if (preg_match($routePath, $requestPath, $matches) === 1) {
+                    return ($callback)($app, $matches);
+                }
+            }
         }
 
         if (!isset($this->onRouteNotFound)) {

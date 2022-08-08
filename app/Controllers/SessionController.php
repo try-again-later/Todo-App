@@ -26,8 +26,13 @@ class LoginData
 
 class SessionController
 {
-    public static function create(App $app): string
+    public static function create(App $app): ?string
     {
+        if (isset($_SESSION['user-email'])) {
+            header('Location: ' . '/');
+            return null;
+        }
+
         return $app->view->render(
             'session/create.twig',
             ['csrfToken' => $_SESSION['csrf-token'] ?? ''],
@@ -36,6 +41,11 @@ class SessionController
 
     public static function store(App $app)
     {
+        if (isset($_SESSION['user-email'])) {
+            header('Location: ' . '/');
+            return;
+        }
+
         [$loginData, $errors] = LoginData::tryFrom($app->request->body);
 
         $keysToErrors = [];
@@ -71,8 +81,10 @@ class SessionController
 
     public static function destroy()
     {
-        session_unset();
-        session_destroy();
+        if (isset($_SESSION['user-email'])) {
+            session_unset();
+            session_destroy();
+        }
         header('Location: ' . '/');
     }
 }

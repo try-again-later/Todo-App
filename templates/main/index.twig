@@ -3,25 +3,7 @@
 {% block title %}ToDo App{% endblock %}
 
 {% block content %}
-  <header>
-    <div>
-      <a href="/" aria-label="Go to home page">ToDo App</a>
-    </div>
-
-    <nav>
-      {% if userEmail is null %}
-        <ul>
-          <li><a href="/login">Sign In</a></li>
-          <li><a href="/signup">Sign Up</a></li>
-        </ul>
-      {% else %}
-        <form action="/logout" method="post">
-          <input type="hidden" name="csrf-token" value="{{ csrfToken }}">
-          <button type="submit">Log Out</button>
-        </form>
-      {% endif %}
-    </nav>
-  </header>
+  {% include 'components/header.twig' %}
 
   <main>
     <h1>ToDo App</h1>
