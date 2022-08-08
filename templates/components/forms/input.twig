@@ -1,0 +1,16 @@
+{% set title = name|replace({'-': ' '})|capitalize %}
+
+<div>
+  <label for="{{ name }}" class="text-sm text-zinc-400 block mb-1">
+    {{ title }}
+  </label>
+  <input
+    type="{{ type }}"
+    name="{{ name }}"
+    id="{{ name }}"
+    {% if required %} required {% endif %}
+    placeholder="{{ title }}"
+    class="border-2 border-zinc-400 block w-full px-2 py-1 rounded-md"
+  />
+  {% include 'components/forms/errors.twig' %}
+</div>

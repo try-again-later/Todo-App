@@ -1,23 +1,28 @@
-<header>
-  <div>
-    <a href="/" aria-label="Go to home page">ToDo App</a>
+<header class="py-2 px-4 bg-zinc-700 text-white">
+  <div class="container m-auto flex items-center gap-4">
+    <a href="/" aria-label="Go to home page" class="block font-bold hover:underline">
+      ToDo App
+    </a>
+
+    <nav class="ml-auto">
+      {% if userEmail is null %}
+        <ul class="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <li>
+            {% include 'components/nav-button.twig' with {href: '/login', title: 'Sign In'} %}
+          </li>
+          <li>
+            {% include 'components/nav-button.twig' with {href: '/signup', title: 'Sign Up'} %}
+          </li>
+        </ul>
+      {% else %}
+        <ul>
+          <li><a href="/todos">Todos</a></li>
+        </ul>
+        <form action="/logout" method="post">
+          {% include 'components/forms/csrf.twig' %}
+          <button type="submit">Log Out</button>
+        </form>
+      {% endif %}
+    </nav>
   </div>
-
-  <nav>
-    {% if userEmail is null %}
-      <ul>
-        <li><a href="/login">Sign In</a></li>
-        <li><a href="/signup">Sign Up</a></li>
-      </ul>
-    {% else %}
-      <ul>
-        <li><a href="/todos">Todos</a></li>
-      </ul>
-
-      <form action="/logout" method="post">
-        {% include 'components/forms/csrf.twig' %}
-        <button type="submit">Log Out</button>
-      </form>
-    {% endif %}
-  </nav>
 </header>

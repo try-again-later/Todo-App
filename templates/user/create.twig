@@ -3,30 +3,31 @@
 {% block title %}ToDo App — Sign Up{% endblock %}
 
 {% block content %}
-  {% include 'components/header.twig' %}
+  {% include 'components/main-heading.twig' with {title: 'Sign Up'} %}
 
-  <main>
-    <h1>Sign Up</h1>
+  {% embed 'components/forms/form.twig' with {action: '/signup'} %}
+    {% block content %}
+      {%
+        include 'components/forms/input.twig'
+        with {type: 'email', name: 'email', required: true, errors: errors['email']}
+      %}
 
-    <form action="/signup" method="post">
-      {% include 'components/forms/csrf.twig' %}
+      {%
+        include 'components/forms/input.twig'
+        with {type: 'password', name: 'password', required: true, errors: errors['password']}
+      %}
 
-      <div>
-        <label>Email: <input type="email" name="email" required /></label>
-        {% include 'components/forms/errors.twig' with {'errors': errors['email']} %}
-      </div>
+      {%
+        include 'components/forms/input.twig'
+        with {
+          type: 'password',
+          name: 'repeated-password',
+          required: true,
+          errors: errors['repeated-password']
+        }
+      %}
 
-      <div>
-        <label>Password: <input type="password" name="password" required /></label>
-        {% include 'components/forms/errors.twig' with {'errors': errors['password']} %}
-      </div>
-
-      <div>
-        <label>Repeat password: <input type="password" name="repeated-password" required /></label>
-        {% include 'components/forms/errors.twig' with {'errors': errors['repeated-password']} %}
-      </div>
-
-      <button type="submit">Sign Up</button>
-    </form>
-  </main>
+      {% include 'components/forms/submit.twig' with {title: 'Sign Up'} %}
+    {% endblock %}
+  {% endembed %}
 {% endblock %}

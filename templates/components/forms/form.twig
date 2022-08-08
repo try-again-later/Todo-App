@@ -1,0 +1,5 @@
+<form action="{{ action }}" method="post" class="m-auto max-w-sm flex flex-col gap-4">
+  {% include 'components/forms/csrf.twig' %}
+
+  {% block content %}{% endblock %}
+</form>
