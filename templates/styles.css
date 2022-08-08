@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .circle-background-hover {
+    @apply
+      isolate
+      before:absolute
+      before:h-full
+      before:w-full
+      before:bg-gray-200
+      before:top-0
+      before:left-0
+      before:rounded-full
+      before:-z-10
+      before:scale-75
+      before:opacity-0
+      before:transition
+      active:before:bg-gray-300
+      hover:before:scale-150
+      hover:before:opacity-100;
+  }
+}

@@ -25,6 +25,7 @@ class Todo
             SELECT todo_id, title, body, completed
             FROM todo
             WHERE user_id = :user_id
+            ORDER BY todo_id ASC
             SQL
         );
         $statement->bindValue(':user_id', $userId, PDO::PARAM_INT);

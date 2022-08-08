@@ -4,14 +4,11 @@
   <label for="{{ name }}" class="text-sm text-zinc-400 block mb-1">
     {{ title }}
   </label>
-  <input
-    type="{{ type }}"
+  <textarea
     name="{{ name }}"
     id="{{ name }}"
-    {% if required %} required {% endif %}
     placeholder="{{ title }}"
-    value="{{ value }}"
-    class="border-2 border-zinc-400 block w-full px-2 py-1 rounded-md text-zinc-700"
-  />
-  {% include 'components/forms/errors.twig' %}
+    rows="4"
+    class="p-2 w-full border-2 border-zinc-400 text-zinc-700 rounded-md resize-none"
+  >{{ value }}</textarea>
 </div>

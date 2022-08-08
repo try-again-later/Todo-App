@@ -5,10 +5,12 @@
 {% block content %}
   {% include 'components/main-heading.twig' with {title: 'ToDo App'} %}
   <p class="text-center mb-4">Manage all your tasks in one place.</p>
-  <a
-    href="{{ userEmail is null ? '/signup' : '/todos' }}"
-    class="block self-center bg-zinc-700 text-white rounded-md transition-colors hover:bg-zinc-600 py-1 px-2 max-w-max m-auto"
-  >
-    Get started
-  </a>
+  {%
+    include 'components/link-button-dark.twig'
+    with {
+      href: userEmail is null ? '/signup' : '/todos',
+      title: 'Get started',
+      class: 'max-w-max m-auto'
+    }
+  %}
 {% endblock %}

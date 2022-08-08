@@ -3,15 +3,22 @@
 {% block title %}ToDo App — Tasks{% endblock %}
 
 {% block content %}
-  {% include 'components/header.twig' %}
+  {% include 'components/main-heading.twig' with {title: 'Tasks'} %}
 
-  <main>
-    <h1>Tasks</h1>
+  {%
+    include 'components/link-button-dark.twig'
+    with {
+      href: '/todos/create',
+      title: 'Add a new task',
+      class: 'max-w-max m-auto mb-8'
+    }
+  %}
 
-    <a href="/todos/create">Add a new task</a>
-
+  <ul class="flex flex-col gap-4">
     {% for todo in todos %}
-      {% include 'todos/todo.twig' with {'todo': todo} %}
+      <li>
+        {% include 'todos/todo.twig' with {'todo': todo} %}
+      </li>
     {% endfor %}
-  </main>
+  </ul>
 {% endblock %}

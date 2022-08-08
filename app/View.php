@@ -20,14 +20,12 @@ class View
         if (!str_ends_with($viewName, '.twig')) {
             $viewName = $viewName . '.twig';
         }
-        if (!isset($params['csrfToken'])) {
-            $params['csrfToken'] = $this->app->csrfToken();
+
+        if ($this->app->auth()) {
+            $params['userEmail'] = $_SESSION['user-email'];
         }
-        if (!isset($params['userEmail']) && isset($_SESSION['user-email'])) {
-            if ($this->app->auth()) {
-                $params['userEmail'] = $_SESSION['user-email'];
-            }
-        }
+        $params['csrfToken'] ??= $this->app->csrfToken();
+        $params['uri'] ??= $this->app->request->uri;
 
         return $this->twig->render($viewName, $params);
     }

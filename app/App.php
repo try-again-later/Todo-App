@@ -29,7 +29,7 @@ class App
 
     public function auth(): bool
     {
-        return isset($_SESSION['user-email']) && !empty($this->user());
+        return !empty($this->user());
     }
 
     public function user(): ?User

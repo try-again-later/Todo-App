@@ -3,27 +3,21 @@
 {% block title %}ToDo App — Edit Task{% endblock %}
 
 {% block content %}
-  {% include 'components/header.twig' %}
+  {% include 'components/main-heading.twig' with {title: 'Edit the Task'} %}
 
-  <main>
-    <h1>Edit Task</h1>
+  {% embed 'components/forms/form.twig' with{action: "/todos/#{ todo.id|url_encode }"} %}
+    {% block content %}
+      {%
+        include 'components/forms/input.twig'
+        with {type: 'text', name: 'title', required: true, value: todo.title|e}
+      %}
 
-    <form action="/todos/{{ todo.id }}" method="post">
-      {% include 'components/forms/csrf.twig' %}
+      {%
+        include 'components/forms/textarea.twig'
+        with {name: 'body', value: todo.body|e}
+      %}
 
-      <div>
-        <label>
-          Title:
-          &nbsp;
-          <input type="text" name="title" placeholder="Title" value="{{ todo.title|e }}" required />
-        </label>
-      </div>
-
-      <div>
-        <label>Body: <textarea name="body" placeholder="Body">{{ todo.body|e }}</textarea></label>
-      </div>
-
-      <button type="submit">Edit</button>
-    </form>
-  </main>
+      {% include 'components/forms/submit-dark.twig' with {title: 'Edit'} %}
+    {% endblock %}
+  {% endembed %}
 {% endblock %}

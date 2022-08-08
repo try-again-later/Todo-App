@@ -1,12 +1,12 @@
 <header class="py-2 px-4 bg-zinc-700 text-white">
-  <div class="container m-auto flex items-center gap-4">
+  <div class="max-w-4xl m-auto flex items-center gap-6">
     <a href="/" aria-label="Go to home page" class="block font-bold hover:underline">
       ToDo App
     </a>
 
-    <nav class="ml-auto">
+    <nav class="flex gap-4 flex-1">
       {% if userEmail is null %}
-        <ul class="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <ul class="flex flex-wrap items-center gap-x-2 gap-y-1 ml-auto">
           <li>
             {% include 'components/nav-button.twig' with {href: '/login', title: 'Sign In'} %}
           </li>
@@ -15,12 +15,19 @@
           </li>
         </ul>
       {% else %}
-        <ul>
-          <li><a href="/todos">Todos</a></li>
+        <ul class="flex flex-wrap items-center">
+          <li>
+            <a
+              href="/todos"
+              class="hover:underline {{ uri matches '<^/todos/?$>' ? 'underline font-bold' : '' }}"
+            >
+              Tasks
+            </a>
+          </li>
         </ul>
-        <form action="/logout" method="post">
+        <form action="/logout" method="post" class="ml-auto">
           {% include 'components/forms/csrf.twig' %}
-          <button type="submit">Log Out</button>
+          {% include 'components/forms/submit-light.twig' with {title: 'Log Out'} %}
         </form>
       {% endif %}
     </nav>
