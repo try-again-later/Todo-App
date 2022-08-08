@@ -1,0 +1,14 @@
+<article>
+  <h2>{{ todo.title|e }}</h2>
+
+  <a href="/todos/{{ todo.id }}/edit">Edit</a>
+
+  <form action="/todos/{{ todo.id }}/destroy" method="post">
+    <input type="hidden" name="csrf-token" value="{{ csrfToken }}" />
+    <button type="submit">Delete</button>
+  </form>
+
+  {% if todo.body is not null %}
+    <p>{{ todo.body|e }}</p>
+  {% endif %}
+</article>

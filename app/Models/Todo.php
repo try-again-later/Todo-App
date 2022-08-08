@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace TryAgainLater\TodoApp\Models;
 
 use PDO;
+use RuntimeException;
 
 class Todo
 {
@@ -44,6 +45,33 @@ class Todo
         return $todos;
     }
 
+    public static function getByTodoId(PDO $pdo, int $todoId): ?self
+    {
+        $statement = $pdo->prepare(<<<SQL
+            SELECT title, body, user_id
+            FROM todo
+            WHERE todo_id = :todo_id
+            SQL
+        );
+        $statement->bindValue(':todo_id', $todoId, PDO::PARAM_INT);
+
+        if (!$statement->execute()) {
+            return null;
+        }
+
+        $todoData = $statement->fetch();
+        if ($todoData === false) {
+            return null;
+        }
+
+        return new Todo(
+            title: $todoData['title'],
+            body: $todoData['body'],
+            userId: $todoData['user_id'],
+            id: $todoId,
+        );
+    }
+
     public function save(PDO $pdo): bool
     {
         if (isset($this->id)) {
@@ -70,15 +98,31 @@ class Todo
         $statement->bindValue(':title', $this->title, PDO::PARAM_STR);
         $statement->bindValue(':user_id', $this->userId, PDO::PARAM_INT);
         if (isset($this->body)) {
-            $statement->bindValue(':body', $this->title, PDO::PARAM_STR);
+            $statement->bindValue(':body', $this->body, PDO::PARAM_STR);
         } else {
             $statement->bindValue(':body', null, PDO::PARAM_NULL);
         }
 
         $executeResult = $statement->execute();
-        if ($executeResult) {
+        if ($executeResult && !isset($this->id)) {
             $this->id = intval($pdo->lastInsertId());
         }
         return $executeResult;
+    }
+
+    public function delete(PDO $pdo): bool
+    {
+        if (!isset($this->id)) {
+            throw new RuntimeException('Cannot delete a todo which has not been created yet');
+        }
+
+        $statement = $pdo->prepare(<<<SQL
+            DELETE FROM todo
+            WHERE todo_id = :todo_id
+            SQL
+        );
+        $statement->bindValue(':todo_id', $this->id, PDO::PARAM_INT);
+
+        return $statement->execute();
     }
 }

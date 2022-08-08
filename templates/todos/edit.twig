@@ -7,5 +7,23 @@
 
   <main>
     <h1>Edit Task</h1>
+
+    <form action="/todos/{{ todo.id }}" method="post">
+      <input type="hidden" name="csrf-token" value="{{ csrfToken }}" />
+
+      <div>
+        <label>
+          Title:
+          &nbsp;
+          <input type="text" name="title" placeholder="Title" value="{{ todo.title|e }}" required />
+        </label>
+      </div>
+
+      <div>
+        <label>Body: <textarea name="body" placeholder="Body">{{ todo.body|e }}</textarea></label>
+      </div>
+
+      <button type="submit">Edit</button>
+    </form>
   </main>
 {% endblock %}

@@ -7,5 +7,11 @@
 
   <main>
     <h1>Tasks</h1>
+
+    <a href="/todos/create">Add a new task</a>
+
+    {% for todo in todos %}
+      {% include 'todos/todo.twig' with {'todo': todo} %}
+    {% endfor %}
   </main>
 {% endblock %}
