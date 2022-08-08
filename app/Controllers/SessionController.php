@@ -69,10 +69,10 @@ class SessionController
         );
     }
 
-    public static function destroy(App $app)
+    public static function destroy()
     {
         session_unset();
         session_destroy();
-        return header('Location: ' . '/');
+        header('Location: ' . '/');
     }
 }

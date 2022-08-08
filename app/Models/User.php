@@ -59,7 +59,11 @@ class User
         $statement->bindValue(':email', $this->email, PDO::PARAM_STR);
         $statement->bindValue(':password', $this->password, PDO::PARAM_STR);
 
-        return $statement->execute();
+        $executeResult = $statement->execute();
+        if ($executeResult) {
+            $this->id = intval($pdo->lastInsertId());
+        }
+        return $executeResult;
     }
 
     public function __construct(
