@@ -3,41 +3,11 @@
     <h2 class="font-bold text-xl mb-2 {{ todo.completed ? 'line-through text-zinc-400' }}">{{ todo.title|e }}</h2>
 
     <div class="ml-auto flex flex-wrap gap-2">
-      <a
-        href="/todos/{{ todo.id|url_encode }}/edit"
-        class="block relative circle-background-hover self-start"
-      >
-        <span class="sr-only">Edit</span>
-        {% include 'components/icons/pencil.twig' %}
-      </a>
+      {% include 'todos/edit-button.twig' %}
 
-      <form action="/todos/{{ todo.id|url_encode }}/destroy" method="post">
-        {% include 'components/forms/csrf.twig' %}
+      {% include 'todos/delete-button.twig' %}
 
-        <button type="submit" class="block relative circle-background-hover self-start">
-          <span class="sr-only">Delete</span>
-          {% include 'components/icons/trash.twig' with {class: 'text-rose-600'} %}
-        </button>
-      </form>
-
-      <form action="/todos/{{ todo.id|url_encode }}" method="post">
-        {% include 'components/forms/csrf.twig' %}
-
-        <input type="hidden" name="completed" value="{{ todo.completed ? 'false' : 'true' }}" />
-
-        <button type="submit" class="block relative circle-background-hover self-start">
-          <span class="sr-only">{{ todo.completed ? 'Mark as undone' : 'Mark as done' }}</span>
-
-          {% if todo.completed %}
-            {%
-              include 'components/icons/check.twig'
-              with {class: 'w-6 h-6 rounded-full border-2 border-emerald-600 text-emerald-600'}
-            %}
-          {% else %}
-            <div class="w-6 h-6 rounded-full border-2 border-emerald-600"></div>
-          {% endif %}
-        </button>
-      </form>
+      {% include 'todos/mark-as-done-button.twig' %}
     </div>
   </div>
 

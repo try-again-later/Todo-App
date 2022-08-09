@@ -1,0 +1,13 @@
+{% set deleteUrl = "/todos/#{ todo.id|url_encode }/destroy" %}
+{% if redirect is not null %}
+  {% set deleteUrl = deleteUrl ~ "?redirect=#{ redirect|url_encode }" %}
+{% endif %}
+
+<form action="{{ deleteUrl }}" method="post">
+  {% include 'components/forms/csrf.twig' %}
+
+  <button type="submit" class="block relative circle-background-hover self-start">
+    <span class="sr-only">Delete</span>
+    {% include 'components/icons/trash.twig' with {class: 'text-rose-600'} %}
+  </button>
+</form>

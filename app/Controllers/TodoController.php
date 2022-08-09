@@ -33,9 +33,25 @@ class TodoController
         $user = $app->user();
         $todos = Todo::getByUserId($app->database->pdo(), $user->id);
 
+        $filter = $app->request->body['filter'] ?? 'all';
+        if (!in_array($filter, ['finished', 'unfinished'], strict: true)) {
+            $filter = 'all';
+        }
+
+        if ($filter === 'finished') {
+            $todos = array_filter($todos, fn ($todo) => $todo->completed);
+        }
+        if ($filter === 'unfinished') {
+            $todos = array_filter($todos, fn ($todo) => !$todo->completed);
+        }
+
         return $app->view->render(
             'todos/index',
-            ['todos' => $todos],
+            [
+                'todos' => $todos,
+                'filter' => $filter,
+                'redirect' => $filter === 'all' ? null : $app->request->uri,
+            ],
         );
     }
 
@@ -76,7 +92,10 @@ class TodoController
 
         return $app->view->render(
             'todos/edit',
-            ['todo' => $todo],
+            [
+                'todo' => $todo,
+                'redirect' => $app->request->query['redirect'] ?? null,
+            ],
         );
     }
 
@@ -108,7 +127,10 @@ class TodoController
 
         $todo->save($app->database->pdo());
 
-        return $app->redirect('/todos');
+        if (!isset($app->request->query['redirect'])) {
+            return $app->redirect('/todos');
+        }
+        return $app->redirect($app->request->query['redirect']);
     }
 
     public static function destroy(App $app, array $params)
@@ -123,6 +145,9 @@ class TodoController
 
         $todo->delete($app->database->pdo());
 
-        return $app->redirect('/todos');
+        if (!isset($app->request->query['redirect'])) {
+            return $app->redirect('/todos');
+        }
+        return $app->redirect($app->request->query['redirect']);
     }
 }

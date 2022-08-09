@@ -1,0 +1,23 @@
+{% set markAsDoneUrl = "/todos/#{ todo.id|url_encode }" %}
+{% if redirect is not null %}
+  {% set markAsDoneUrl = markAsDoneUrl ~ "?redirect=#{ redirect|url_encode }" %}
+{% endif %}
+
+<form action="{{ markAsDoneUrl }}" method="post">
+  {% include 'components/forms/csrf.twig' %}
+
+  <input type="hidden" name="completed" value="{{ todo.completed ? 'false' : 'true' }}" />
+
+  <button type="submit" class="block relative circle-background-hover self-start">
+    <span class="sr-only">{{ todo.completed ? 'Mark as undone' : 'Mark as done' }}</span>
+
+    {% if todo.completed %}
+      {%
+        include 'components/icons/check.twig'
+        with {class: 'w-6 h-6 rounded-full border-2 border-emerald-600 text-emerald-600'}
+      %}
+    {% else %}
+      <div class="w-6 h-6 rounded-full border-2 border-emerald-600"></div>
+    {% endif %}
+  </button>
+</form>

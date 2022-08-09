@@ -19,7 +19,7 @@
           <li>
             <a
               href="/todos"
-              class="hover:underline {{ uri matches '<^/todos/?$>' ? 'underline font-bold' : '' }}"
+              class="hover:underline {{ uri matches '<^/todos/?(\\?[^/]*)?$>' ? 'underline font-bold' : '' }}"
             >
               Tasks
             </a>

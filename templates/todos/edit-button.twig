@@ -1,0 +1,12 @@
+{% set editUrl = "/todos/#{ todo.id|url_encode }/edit" %}
+{% if redirect is not null %}
+  {% set editUrl = editUrl ~ "?redirect=#{ redirect|url_encode }" %}
+{% endif %}
+
+<a
+  href="{{ editUrl }}"
+  class="block relative circle-background-hover self-start"
+>
+  <span class="sr-only">Edit</span>
+  {% include 'components/icons/pencil.twig' %}
+</a>

@@ -12,6 +12,7 @@ use TryAgainLater\Pup\Schema;
 class Request
 {
     public readonly string $path;
+    public readonly array $query;
     public readonly string $uri;
     public readonly RequestMethod $method;
     public readonly array $body;
@@ -33,6 +34,14 @@ class Request
 
         $this->uri = $serverArray['REQUEST_URI'];
         $this->path = explode('?', $this->uri)[0];
+
+        $queryArray = [];
+        $query = parse_url($serverArray['REQUEST_URI'], PHP_URL_QUERY);
+        if (isset($query)) {
+            parse_str($query, $queryArray);
+        }
+        $this->query = $queryArray;
+
         $this->method = RequestMethod::fromString($serverArray['REQUEST_METHOD']);
 
         if ($this->method === RequestMethod::GET) {

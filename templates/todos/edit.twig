@@ -5,7 +5,12 @@
 {% block content %}
   {% include 'components/main-heading.twig' with {title: 'Edit the Task'} %}
 
-  {% embed 'components/forms/form.twig' with{action: "/todos/#{ todo.id|url_encode }"} %}
+  {% set editUrl = "/todos/#{ todo.id|url_encode }" %}
+  {% if redirect is not null %}
+    {% set editUrl = editUrl ~ "?redirect=#{ redirect|url_encode }" %}
+  {% endif %}
+
+  {% embed 'components/forms/form.twig' with{action: editUrl} %}
     {% block content %}
       {%
         include 'components/forms/input.twig'
