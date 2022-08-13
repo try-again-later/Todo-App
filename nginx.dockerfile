@@ -5,7 +5,7 @@ FROM node:18-bullseye AS builder
 WORKDIR /tmp/
 
 COPY ./templates/ /tmp/templates/
-COPY ./package.json ./package-lock.json /tmp/
+COPY ./package.json ./package-lock.json ./tailwind.config.js /tmp/
 
 RUN \
   mkdir -p /tmp/public/ \

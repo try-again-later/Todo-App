@@ -7,7 +7,7 @@ git clone https://github.com/try-again-later/Todo-App
 
 cd Todo-App
 cp .env.local .env
-docker-compose up -d
+docker-compose up -d --build
 ```
 
 The app will be available at [localhost:8080](http://localhost:8080).
@@ -29,9 +29,9 @@ MEMCACHED_SERVERS=127.0.0.1:11211 \
     -d variables_order=EGPCS \
     ./migrations.php
 
-# compile CSS styles
+# run tailwind in watch mode
 npm i
-npm run build
+npm run dev
 
 # run a server with the app
 APP_ENV=development \
