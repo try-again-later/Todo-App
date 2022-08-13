@@ -1,8 +1,10 @@
 <article class="max-w-xl m-auto rounded-md bg-white shadow-md p-4">
-  <div class="flex">
-    <h2 class="font-bold text-xl mb-2 {{ todo.completed ? 'line-through text-zinc-400' }}">{{ todo.title|e }}</h2>
+  <div class="flex flex-wrap gap-2">
+    <h2 class="break-words w-full font-bold text-xl mb-2 {{ todo.completed ? 'line-through text-zinc-400' }}">
+      {{ todo.title|e }}
+    </h2>
 
-    <div class="ml-auto flex flex-wrap gap-2">
+    <div class="-order-1 shrink-0 ml-auto flex gap-2 items-start justify-start">
       {% include 'todos/edit-button.twig' %}
 
       {% include 'todos/delete-button.twig' %}
@@ -12,6 +14,6 @@
   </div>
 
   {% if todo.body is not null %}
-    <p class="{{ todo.completed ? 'line-through text-zinc-400' }}">{{ todo.body|e }}</p>
+    <p class="break-words w-full {{ todo.completed ? 'line-through text-zinc-400' }}">{{ todo.body|e }}</p>
   {% endif %}
 </article>
