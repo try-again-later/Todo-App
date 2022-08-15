@@ -11,6 +11,8 @@ use TryAgainLater\TodoApp\Models\User;
 
 class App
 {
+    public const FLASH_MESSAGES_KEY = 'flash-messages';
+
     public View $view;
 
     public function __construct(
@@ -51,5 +53,24 @@ class App
     {
         header('Location: ' . $to);
         return null;
+    }
+
+    public function setFlashMessage(string $key, string $value): void
+    {
+        $_SESSION[self::FLASH_MESSAGES_KEY][$key] = $value;
+    }
+
+    public function getFlashMessage(string $key): ?string
+    {
+        if (
+            !isset($_SESSION[self::FLASH_MESSAGES_KEY]) ||
+            !isset($_SESSION[self::FLASH_MESSAGES_KEY][$key])
+        ) {
+            return null;
+        }
+
+        $value = $_SESSION[self::FLASH_MESSAGES_KEY][$key];
+        unset($_SESSION[self::FLASH_MESSAGES_KEY][$key]);
+        return $value;
     }
 }

@@ -1,0 +1,27 @@
+<article
+  class="bg-white rounded-md shadow-md py-4 px-4 flex gap-x-4 gap-y-2 items-center {{ class }}"
+  x-data="{ shown: true }"
+  x-cloak
+  x-transition
+  x-show="shown"
+>
+  <div class="flex gap-4 self-stretch items-center">
+    <div class="w-1 bg-emerald-500 self-stretch rounded-full"></div>
+    {% include 'components/icons/badge-check.twig' with {class: 'w-8 h-8 text-emerald-500 shrink-0'} %}
+  </div>
+  <div>
+    <h2 class="text-lg tracking-wide mb-0.5 font-semibold">Success!</h2>
+    <p>{% block content %}{% endblock %}</p>
+  </div>
+  <button
+    @click="shown = false"
+    type="button"
+    class="block relative circle-background-hover"
+  >
+    {%
+      include 'components/icons/x.twig'
+      with {class: 'w-5 h-5 text-gray-400'}
+    %}
+    <span class="sr-only">Close</span>
+  </button>
+</article>

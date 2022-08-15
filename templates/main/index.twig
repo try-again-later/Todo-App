@@ -13,4 +13,17 @@
       class: 'max-w-max m-auto'
     }
   %}
+
+  <aside>
+    {% if signUpSuccess is not null %}
+      {%
+        embed 'components/flash-message.twig'
+        with {class: 'fixed bottom-4 right-4 max-w-[calc(100vw_-_2rem)]'}
+      %}
+        {% block content %}
+          {{ signUpSuccess }}
+        {% endblock %}
+      {% endembed %}
+    {% endif %}
+  </aside>
 {% endblock %}

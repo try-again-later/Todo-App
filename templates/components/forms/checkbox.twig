@@ -1,0 +1,17 @@
+{% set title = name|replace({'-': ' '})|capitalize %}
+
+<div class="flex flex-wrap gap-2 items-center group">
+  <input
+    type="checkbox"
+    name="{{ name }}"
+    id="{{ name }}"
+    {% if required %} required {% endif %}
+    class="accent-yellow-500 w-5 h-5 cursor-pointer"
+  />
+  <label
+    for="{{ name }}"
+    class="cursor-pointer group-hover:underline"
+  >
+    {{ title }}
+  </label>
+</div>

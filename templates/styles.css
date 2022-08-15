@@ -21,4 +21,8 @@
       hover:before:scale-150
       hover:before:opacity-100;
   }
+
+  [x-cloak] {
+    display: none !important;
+  }
 }

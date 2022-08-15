@@ -40,6 +40,8 @@ class SignUpData
 
 class UserController
 {
+    public const SIGN_UP_SUCCESSFUL_MESSAGE_KEY = 'sign-up-successful';
+
     public static function create(App $app): ?string
     {
         if ($app->auth()) {
@@ -91,8 +93,11 @@ class UserController
         );
         $user->save($app->database->pdo());
 
-        $_SESSION['user-email'] = $user->email;
         unset($_SESSION['last-user-input']);
+        $app->setFlashMessage(
+            self::SIGN_UP_SUCCESSFUL_MESSAGE_KEY,
+            'You have successfully signed up. Now you can login.',
+        );
 
         return $app->redirect('/');
     }

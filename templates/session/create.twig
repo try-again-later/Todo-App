@@ -17,6 +17,11 @@
         with {type: 'password', name: 'password', required: true, errors: errors['password']}
       %}
 
+      {%
+        include 'components/forms/checkbox.twig'
+        with {name: 'remember me'}
+      %}
+
       {% include 'components/forms/submit-dark.twig' with {title: 'Sign In'} %}
     {% endblock %}
   {% endembed %}

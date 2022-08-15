@@ -25,7 +25,13 @@ try {
         })
 
         ->get('/', static function (App $app) {
-            return $app->view->render('main/index');
+            return $app->view->render(
+                'main/index',
+                [
+                    'signUpSuccess' =>
+                        $app->getFlashMessage(UserController::SIGN_UP_SUCCESSFUL_MESSAGE_KEY)
+                ],
+            );
         })
 
         ->get('signup', UserController::create(...))

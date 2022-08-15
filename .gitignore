@@ -3,6 +3,7 @@ vendor/
 node_modules/
 
 public/styles.css
+public/app.js
 
 .env
 
