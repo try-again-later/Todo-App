@@ -4,10 +4,13 @@ declare(strict_types = 1);
 
 namespace TryAgainLater\TodoApp;
 
+use RuntimeException;
+
+use TryAgainLater\TodoApp\Controllers\SessionController;
 use Twig\Environment as TwigEnvironment;
 
 use TryAgainLater\TodoApp\Database\Database;
-use TryAgainLater\TodoApp\Models\User;
+use TryAgainLater\TodoApp\Models\{User, Session};
 
 class App
 {
@@ -36,16 +39,35 @@ class App
 
     public function user(): ?User
     {
-        if (!isset($_SESSION['user-email'])) {
+        if (isset($_SESSION['user-email'])) {
+            $user = User::getByEmail($this->database->pdo(), $_SESSION['user-email']);
+            if (!isset($user)) {
+                unset($_SESSION['user-email']);
+                return null;
+            }
+
+            return $user;
+        }
+
+        if (!isset($_COOKIE[SessionController::REMEMBER_ME_COOKIE_NAME])) {
             return null;
         }
 
-        $user = User::getByEmail($this->database->pdo(), $_SESSION['user-email']);
-        if (!isset($user)) {
-            unset($_SESSION['user-email']);
-            return null;
+        var_dump($_COOKIE[SessionController::REMEMBER_ME_COOKIE_NAME]);
+
+        $token = $_COOKIE[SessionController::REMEMBER_ME_COOKIE_NAME];
+        [$selector, $validator] = Session::parseSelectorValidatorFromToken($token);
+        $session = Session::getBySelector($this->database->pdo(), $selector);
+
+        if (!isset($session) || !$session->verify($validator)) {
+            setcookie(SessionController::REMEMBER_ME_COOKIE_NAME, '', -1);
+            throw new RuntimeException('Invalid "remember me" token.');
         }
 
+        $user = $session->user($this->database->pdo());
+        if (isset($user)) {
+            $_SESSION['user-email'] = $user->email;
+        }
         return $user;
     }
 

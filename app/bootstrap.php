@@ -18,7 +18,7 @@ use TryAgainLater\TodoApp\Util\File;
 
 // check if required env variables are available
 
-const REQUIRED_ENV_VARS = ['APP_ENV', 'MEMCACHED_SERVERS'];
+const REQUIRED_ENV_VARS = ['APP_ENV'];
 
 if (count(array_intersect_key(array_flip(REQUIRED_ENV_VARS), $_ENV)) !== count(REQUIRED_ENV_VARS)) {
     echo 'Environment variables "' . implode(', ', REQUIRED_ENV_VARS) . '" are not defined.';
@@ -29,14 +29,16 @@ if (count(array_intersect_key(array_flip(REQUIRED_ENV_VARS), $_ENV)) !== count(R
 
 // set memcached as sessions handler
 
-ini_set('session.save_handler', 'memcached');
-ini_set('session.save_path', $_ENV['MEMCACHED_SERVERS']);
-ini_set('memcached.sess_persistent', 1);
-ini_set('memcached.sess_binary_protocol', 1);
+if (isset($_ENV['MEMCACHED_SERVERS'])) {
+    ini_set('session.save_handler', 'memcached');
+    ini_set('session.save_path', $_ENV['MEMCACHED_SERVERS']);
+    ini_set('memcached.sess_persistent', 1);
+    ini_set('memcached.sess_binary_protocol', 1);
 
-if (!empty($_ENV['MEMCACHED_USERNAME']) && !empty($_ENV['MEMCACHED_PASSWORD'])) {
-    ini_set('memcached.sess_sasl_username', $_ENV['MEMCACHED_USERNAME']);
-    ini_set('memcached.sess_sasl_password', $_ENV['MEMCACHED_PASSWORD']);
+    if (!empty($_ENV['MEMCACHED_USERNAME']) && !empty($_ENV['MEMCACHED_PASSWORD'])) {
+        ini_set('memcached.sess_sasl_username', $_ENV['MEMCACHED_USERNAME']);
+        ini_set('memcached.sess_sasl_password', $_ENV['MEMCACHED_PASSWORD']);
+    }
 }
 
 session_set_cookie_params(["SameSite" => "Strict"]);
