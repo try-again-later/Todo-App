@@ -86,7 +86,7 @@ class SessionController
             [$selector, $validator, $token] = Session::createSelectorValidatorToken();
 
             $expiringAt = time() + 60 * 60 * 24 * self::DAYS_SESSION_LIFESPAN;
-            $expiringAtString = date('Y-m-d H:i:s', $expiringAt);
+            $expiringAtString = gmdate('Y-m-d H:i:s e', $expiringAt);
 
             $hashedValidator = password_hash($validator, PASSWORD_BCRYPT);
 
@@ -98,11 +98,10 @@ class SessionController
             );
 
             $sessionSaveResult = $session->save($app->database->pdo());
-            if (!$sessionSaveResult) {
-                throw new RuntimeException('Internal error');
+            if ($sessionSaveResult) {
+                setcookie(self::REMEMBER_ME_COOKIE_NAME, $token, $expiringAt);
+                $user->deleteExpiredSessions($app->database->pdo());
             }
-
-            setcookie(self::REMEMBER_ME_COOKIE_NAME, $token, $expiringAt);
         }
 
         $_SESSION['user-email'] = $loginData->email;

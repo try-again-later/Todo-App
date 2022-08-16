@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace TryAgainLater\TodoApp\Models;
 
 use PDO;
+use RuntimeException;
 
 class User
 {
@@ -64,6 +65,23 @@ class User
             $this->id = intval($pdo->lastInsertId());
         }
         return $executeResult;
+    }
+
+    public function deleteExpiredSessions(PDO $pdo): bool
+    {
+        if (!isset($this->id)) {
+            throw new RuntimeException('Cannot delete expired sessions of a non-existent user.');
+        }
+
+        $statement = $pdo->prepare(<<<SQL
+            DELETE FROM "session"
+            WHERE
+                user_id = :user_id AND
+                expiring_at <= NOW()
+            SQL
+        );
+        $statement->bindValue(':user_id', $this->id, PDO::PARAM_INT);
+        return $statement->execute();
     }
 
     public function __construct(
