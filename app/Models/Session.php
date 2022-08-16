@@ -51,6 +51,14 @@ class Session
         return [$selector, $validator, $token];
     }
 
+    public static function validateToken(?string $token): bool
+    {
+        if (!isset($token)) {
+            return false;
+        }
+        return preg_match(self::TOKEN_PATTERN, $token) === 1;
+    }
+
     public static function parseSelectorValidatorFromToken(string $token): array
     {
         if (!preg_match(self::TOKEN_PATTERN, $token, $matches)) {
@@ -102,12 +110,14 @@ class Session
         $statement = $pdo->prepare(<<<SQL
             SELECT user_id, email, password
             FROM "user"
-            JOIN "session"
-                ON "user".user_id = (
-                    SELECT user_id
-                    FROM "session"
-                    WHERE session_id = :session_id
-                )
+            WHERE "user".user_id = (
+                SELECT "session".user_id
+                FROM "session"
+                WHERE
+                    session_id = :session_id AND
+                    expiring_at > NOW()
+                LIMIT 1
+            )
             SQL
         );
         $statement->bindValue(':session_id', $this->id);

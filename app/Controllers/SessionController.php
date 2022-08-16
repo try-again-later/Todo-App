@@ -123,11 +123,9 @@ class SessionController
             $session = Session::getBySelector($app->database->pdo(), $selector);
             setcookie(self::REMEMBER_ME_COOKIE_NAME, '', -1);
 
-            if (!isset($session) || !$session->verify($validator)) {
-                throw new RuntimeException('Invalid "remember me" token.');
+            if (isset($session) && $session->verify($validator)) {
+                $session->delete($app->database->pdo());
             }
-
-            $session->delete($app->database->pdo());
         }
 
         session_unset();

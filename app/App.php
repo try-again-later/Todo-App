@@ -53,15 +53,17 @@ class App
             return null;
         }
 
-        var_dump($_COOKIE[SessionController::REMEMBER_ME_COOKIE_NAME]);
-
         $token = $_COOKIE[SessionController::REMEMBER_ME_COOKIE_NAME];
+        if (!Session::validateToken($token)) {
+            setcookie(SessionController::REMEMBER_ME_COOKIE_NAME, '', -1);
+            return null;
+        }
         [$selector, $validator] = Session::parseSelectorValidatorFromToken($token);
         $session = Session::getBySelector($this->database->pdo(), $selector);
 
         if (!isset($session) || !$session->verify($validator)) {
             setcookie(SessionController::REMEMBER_ME_COOKIE_NAME, '', -1);
-            throw new RuntimeException('Invalid "remember me" token.');
+            return null;
         }
 
         $user = $session->user($this->database->pdo());
