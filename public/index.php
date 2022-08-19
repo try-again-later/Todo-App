@@ -5,7 +5,11 @@ declare(strict_types = 1);
 use TryAgainLater\TodoApp\{App, Request, Router};
 use TryAgainLater\TodoApp\Controllers\{UserController, SessionController, TodoController};
 
-require_once '../app/bootstrap.php';
+$bootstrapResult = require_once '../app/bootstrap.php';
+if (!$bootstrapResult) {
+    http_response_code(500);
+    return;
+}
 
 try {
     $request = new Request(serverArray: $_SERVER, getArray: $_GET, postArray: $_POST);

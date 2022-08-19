@@ -21,9 +21,11 @@ use TryAgainLater\TodoApp\Util\File;
 const REQUIRED_ENV_VARS = ['APP_ENV'];
 
 if (count(array_intersect_key(array_flip(REQUIRED_ENV_VARS), $_ENV)) !== count(REQUIRED_ENV_VARS)) {
-    echo 'Environment variables "' . implode(', ', REQUIRED_ENV_VARS) . '" are not defined.';
-    http_response_code(500);
-    return;
+    trigger_error(
+        'Environment variables "' . implode(', ', REQUIRED_ENV_VARS) . '" are not defined.',
+        E_USER_ERROR,
+    );
+    return false;
 }
 
 
@@ -67,9 +69,8 @@ if ($environment->is(EnvironmentType::Staging, EnvironmentType::Production)) {
 
 $logFileCreation = File::create($appPaths->errorLog());
 if ($logFileCreation->failed()) {
-    http_response_code(500);
     trigger_error('Failed to create a log file.', E_USER_ERROR);
-    return;
+    return false;
 }
 
 set_exception_handler(function (Throwable $error) use ($appPaths, $environment) {
@@ -102,3 +103,5 @@ $database = new Database($databaseConfig);
 
 $twigLoader = new TwigLoader($appPaths->templates());
 $twig = new TwigEnvironment($twigLoader);
+
+return true;
