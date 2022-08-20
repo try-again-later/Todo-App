@@ -9,7 +9,10 @@
     "scripts": {
         "migrate": "APP_ENV=${APP_ENV:-development} php -c ./php.ini ./migrations.php",
         "migrate:fresh": "APP_ENV=${APP_ENV:-development} php -c ./php.ini ./migrations.php reset",
-        "dev": "APP_ENV=development MEMCACHED_SERVERS=127.0.0.1:11211 php -S localhost:8080 -c ./php.ini -t ./public"
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "APP_ENV=development MEMCACHED_SERVERS=127.0.0.1:11211 php -S localhost:8080 -c ./php.ini -t ./public"
+        ]
     },
     "require": {
         "vlucas/phpdotenv": "^5.4",
