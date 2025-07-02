@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/resources/app.css">
     {% block css %}{% endblock %}
   </head>
   <body class="bg-gray-100">
@@ -14,7 +14,7 @@
       {% block content %}{% endblock %}
     </main>
 
-    <script type="module" src="/app.js"></script>
+    <script type="module" src="/resources/app.js"></script>
     {% block js %}{% endblock %}
   </body>
 </html>

@@ -18,7 +18,7 @@
     {% if signUpSuccess is not null %}
       {%
         embed 'components/flash-message.twig'
-        with {class: 'fixed bottom-4 right-4 max-w-[calc(100vw_-_2rem)]'}
+        with {class: 'fixed bottom-4 right-4 max-w-[calc(100vw-2rem)]'}
       %}
         {% block content %}
           {{ signUpSuccess }}

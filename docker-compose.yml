@@ -1,8 +1,5 @@
-version: '3.9'
-
 services:
-  app:
-    container_name: todo-app
+  todo-app-php-fpm:
     environment:
       - APP_ENV=${APP_ENV}
       - MEMCACHED_USERNAME=${MEMCACHED_USERNAME}
@@ -10,54 +7,56 @@ services:
       - MEMCACHED_SERVERS=${MEMCACHED_SERVERS}
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: ./docker/php-fpm/Dockerfile
       args:
         - db_host=${DB_HOST}
         - db_port=${DB_PORT}
         - memcached_host=${MEMCACHED_HOST}
         - memcached_port=${MEMCACHED_PORT}
-    working_dir: /var/www/
+    restart: always
+    networks:
+      - todo-app
     depends_on:
-      - postgres
-      - memcached
+      todo-app-postgres:
+        condition: service_started
+      todo-app-memcached:
+        condition: service_started
 
-  nginx:
-    container_name: todo-app-nginx
+  todo-app-nginx:
     build:
       context: ./
-      dockerfile: nginx.dockerfile
-    # image: nginx:1.23.0-alpine
+      dockerfile: ./docker/nginx/Dockerfile
+    restart: always
+    networks:
+      - todo-app
     ports:
-      - 8080:80
-    # volumes:
-    #   - ./:/var/www/
-    #   - ./nginx.conf:/etc/nginx/nginx.conf
+      - "${NGINX_PORT:-80}:80"
     depends_on:
-      - app
+      todo-app-php-fpm:
+        condition: service_started
 
-  postgres:
-    container_name: todo-app-postgres
-    image: postgres:14.4
+  todo-app-postgres:
+    image: postgres:16
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_DATABASE}
     ports:
       - 5432:5432
+    volumes:
+      - todo-app-data:/var/lib/postgresql/data
+    networks:
+      - todo-app
 
-  memcached:
-    container_name: todo-app-memcached
+  todo-app-memcached:
     image: memcached:1.6.15
     ports:
       - 11211:11211
+    networks:
+      - todo-app
 
-  pgadmin:
-    container_name: todo-app-pgadmin
-    image: dpage/pgadmin4
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
-      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
-    ports:
-      - '8081:80'
-    depends_on:
-      - postgres
+networks:
+  todo-app:
+
+volumes:
+  todo-app-data:

@@ -7,24 +7,21 @@
         }
     },
     "scripts": {
-        "migrate": "APP_ENV=${APP_ENV:-development} php -c ./php.ini ./migrations.php",
-        "migrate:fresh": "APP_ENV=${APP_ENV:-development} php -c ./php.ini ./migrations.php reset",
+        "migrate": "APP_ENV=${APP_ENV:-development} php -d variables_order=EGPCS ./migrations.php",
+        "migrate:fresh": "APP_ENV=${APP_ENV:-development} php -d variables_order=EGPCS ./migrations.php reset",
         "dev": [
             "Composer\\Config::disableProcessTimeout",
-            "APP_ENV=development MEMCACHED_SERVERS=127.0.0.1:11211 php -S localhost:8080 -c ./php.ini -t ./public"
+            "APP_ENV=development MEMCACHED_SERVERS=127.0.0.1:11211 php -S localhost:8080 -d variables_order=EGPCS -t ./public"
         ]
     },
     "require": {
-        "vlucas/phpdotenv": "^5.4",
+        "vlucas/phpdotenv": "^5.6",
         "try-again-later/multi-backed-enum": "^0.1.0",
         "try-again-later/pup": "^0.1.0",
-        "twig/twig": "^3.0",
+        "twig/twig": "^3.21",
         "ext-pdo": "*",
         "ext-pgsql": "*",
         "ext-pdo_pgsql": "*",
         "ext-memcached": "*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^9"
     }
 }
